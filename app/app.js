@@ -1,18 +1,29 @@
-const socket = new WebSocket(
+const socket = io(
   "ws://localhost:8080"
 );
 
-socket.onmessage = ({
-  data,
-}) => {
-  console.log(
-    "Message from Server ",
-    data
-  );
-};
-
+socket.on(
+  "message",
+  (text) => {
+    const el =
+      document.createElement(
+        "li"
+      );
+    el.innerHTML = text;
+    document
+      .querySelector("ul")
+      .appendChild(el);
+  }
+);
 document.querySelector(
   "button"
 ).onclick = () => {
-  socket.send("hello");
+  const text =
+    document.querySelector(
+      "input"
+    ).value;
+  socket.emit(
+    "message",
+    text
+  );
 };
